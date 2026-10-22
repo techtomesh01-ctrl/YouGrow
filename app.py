@@ -1,4 +1,5 @@
 import os
+import base64
 import secrets
 from functools import wraps
 import psycopg2
@@ -33,7 +34,7 @@ def init_db():
     CREATE TABLE IF NOT EXISTS users (
       id BIGSERIAL PRIMARY KEY, email TEXT UNIQUE NOT NULL, password_hash TEXT NOT NULL,
       display_name TEXT NOT NULL, role TEXT NOT NULL DEFAULT 'user' CHECK (role IN ('user','admin')),
-      points_balance INTEGER NOT NULL DEFAULT 0 CHECK (points_balance >= 0), created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+      points_balance INTEGER NOT NULL DEFAULT 0 CHECK (points_balance >= 0), created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(), profile_image TEXT
     );
     CREATE TABLE IF NOT EXISTS channels (
       id BIGSERIAL PRIMARY KEY, user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -56,6 +57,7 @@ def init_db():
             cur.execute(ddl)
             # Additive migration: existing password accounts remain available.
             cur.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS google_sub TEXT")
+            cur.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS profile_image TEXT")
             cur.execute("CREATE UNIQUE INDEX IF NOT EXISTS users_google_sub_unique ON users(google_sub) WHERE google_sub IS NOT NULL")
 
 # Initialize tables lazily on the first request. CREATE TABLE IF NOT EXISTS is safe
@@ -119,7 +121,7 @@ def current_user():
         return None
     with connect() as conn:
         with conn.cursor() as cur:
-            cur.execute("SELECT id,email,display_name,role,points_balance FROM users WHERE id=%s", (uid,))
+            cur.execute("SELECT id,email,display_name,role,points_balance,profile_image FROM users WHERE id=%s", (uid,))
             return cur.fetchone()
 
 def award_points(user_id, action, idempotency_key):
@@ -256,6 +258,33 @@ def google_callback():
 def logout():
     session.clear()
     return redirect(url_for("index"))
+
+@app.post("/profile/photo")
+@login_required
+def upload_profile_photo():
+    photo = request.files.get("photo")
+    if not photo or not photo.filename:
+        flash("Choose a profile photo first.")
+        return redirect(url_for("dashboard"))
+    mime = (photo.mimetype or "").lower()
+    allowed = {"image/jpeg": "jpeg", "image/png": "png", "image/webp": "webp"}
+    if mime not in allowed:
+        flash("Use a JPG, PNG or WEBP image.")
+        return redirect(url_for("dashboard"))
+    raw = photo.stream.read(2 * 1024 * 1024 + 1)
+    if not raw or len(raw) > 2 * 1024 * 1024:
+        flash("Photo must be under 2 MB.")
+        return redirect(url_for("dashboard"))
+    signatures = {"image/jpeg": raw.startswith(b"\\xff\\xd8\\xff"), "image/png": raw.startswith(b"\\x89PNG\\r\\n\\x1a\\n"), "image/webp": len(raw) >= 12 and raw[:4] == b"RIFF" and raw[8:12] == b"WEBP"}
+    if not signatures.get(mime, False):
+        flash("The selected file does not look like a valid image.")
+        return redirect(url_for("dashboard"))
+    encoded = "data:" + mime + ";base64," + base64.b64encode(raw).decode("ascii")
+    with connect() as conn:
+        with conn.cursor() as cur:
+            cur.execute("UPDATE users SET profile_image=%s WHERE id=%s", (encoded, session["user_id"]))
+    flash("Profile photo updated.")
+    return redirect(url_for("dashboard"))
 
 @app.get("/dashboard")
 @login_required
