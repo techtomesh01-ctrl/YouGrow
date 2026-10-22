@@ -232,9 +232,9 @@ def google_callback():
                 else:
                     cur.execute("INSERT INTO users(email,password_hash,display_name,google_sub) VALUES(%s,%s,%s,%s) RETURNING id", (email, generate_password_hash(secrets.token_urlsafe(32)), name, google_sub))
                     uid = cur.fetchone()["id"]
+        next_path = session.get("oauth_next", "")
         session.clear()
         session["user_id"] = uid
-        next_path = session.pop("oauth_next", "")
         if next_path.startswith("/") and not next_path.startswith("//"):
             return redirect(next_path)
         return redirect(url_for("dashboard"))
