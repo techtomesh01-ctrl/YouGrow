@@ -131,7 +131,13 @@ def award_points(user_id, action, idempotency_key):
 
 @app.get("/health")
 def health():
-    with connect() as conn:\n        with conn.cursor() as cur:\n            cur.execute("SELECT COUNT(*) AS total FROM users")\n            member_count = int(cur.fetchone()["total"])\n    return {"ok": True, "app": "YouGrow", "database_configured": bool(DATABASE_URL), "registered_members": member_count, "premium_unlocked": member_count >= PREMIUM_MEMBER_THRESHOLD, "premium_threshold": PREMIUM_MEMBER_THRESHOLD}
+    if not DATABASE_URL:
+        return {"ok": True, "app": "YouGrow", "database_configured": False, "registered_members": 0, "premium_unlocked": False, "premium_threshold": PREMIUM_MEMBER_THRESHOLD}, 503
+    with connect() as conn:
+        with conn.cursor() as cur:
+            cur.execute("SELECT COUNT(*) AS total FROM users")
+            member_count = int(cur.fetchone()["total"])
+    return {"ok": True, "app": "YouGrow", "database_configured": True, "registered_members": member_count, "premium_unlocked": member_count >= PREMIUM_MEMBER_THRESHOLD, "premium_threshold": PREMIUM_MEMBER_THRESHOLD}
 
 @app.get("/")
 def index():
