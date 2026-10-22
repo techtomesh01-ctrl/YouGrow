@@ -10,14 +10,10 @@ services:
       - key: SECRET_KEY
         generateValue: true
       - key: DATABASE_URL
-        fromDatabase:
-          name: yougrow-db
-          property: connectionString
+        sync: false
       - key: ADMIN_EMAIL
         sync: false
-
-databases:
-  - name: yougrow-db
-    plan: free
-    databaseName: yougrow
-    user: yougrow_user
+      - key: ADSENSE_CLIENT_ID
+        sync: false
+      - key: ADSENSE_SLOT_ID
+        sync: false
