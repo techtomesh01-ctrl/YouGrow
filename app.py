@@ -149,6 +149,9 @@ def health():
 
 @app.get("/")
 def index():
+    # Keep signed-in members inside the authenticated area until they log out.
+    if session.get("user_id"):
+        return redirect(url_for("dashboard"))
     user = current_user()
     with connect() as conn:
         with conn.cursor() as cur:
@@ -158,6 +161,8 @@ def index():
 
 @app.route("/register", methods=["GET","POST"])
 def register():
+    if session.get("user_id"):
+        return redirect(url_for("dashboard"))
     if request.method == "POST":
         email = request.form.get("email","").strip().lower()
         name = request.form.get("display_name","").strip()[:80]
@@ -182,6 +187,8 @@ def register():
 
 @app.route("/login", methods=["GET","POST"])
 def login():
+    if session.get("user_id"):
+        return redirect(url_for("dashboard"))
     if request.method == "POST":
         email = request.form.get("email","").strip().lower()
         password = request.form.get("password","")
@@ -198,6 +205,8 @@ def login():
 
 @app.get("/auth/google")
 def google_login():
+    if session.get("user_id"):
+        return redirect(url_for("dashboard"))
     if not GOOGLE_CLIENT_ID or not GOOGLE_CLIENT_SECRET:
         flash("Google sign-in is not configured yet. The site owner must add GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in Render.")
         return redirect(url_for("login"))
