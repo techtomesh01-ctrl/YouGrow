@@ -46,6 +46,17 @@ def init_db():
         with conn.cursor() as cur:
             cur.execute(ddl)
 
+# Initialize tables lazily on the first request. CREATE TABLE IF NOT EXISTS is safe
+# across multiple Gunicorn workers and keeps a fresh Render database bootable.
+_db_initialized = False
+
+@app.before_request
+def ensure_database_initialized():
+    global _db_initialized
+    if not _db_initialized:
+        init_db()
+        _db_initialized = True
+
 def csrf_token():
     token = session.get("_csrf")
     if not token:
