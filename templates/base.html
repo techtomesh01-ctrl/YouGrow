@@ -20,4 +20,27 @@ nav>a{color:#d5d5d5}nav>a:hover{color:#b00020}
 footer .footer-dot{color:#8f001b}
 a{color:#c35b6c}a:hover{color:#df7b89}
 
+
+/* Site-wide creator arcade polish: bold, playful, accessible and responsive */
+:root{--bg:#08090d;--panel:#11131a;--panel2:#191c25;--line:#292d3a;--red:#ff3155;--red2:#ff3155;--muted:#aeb4c3;--text:#f7f8fc;--shadow:0 18px 55px #0009}
+body{background:radial-gradient(ellipse at 12% 0%,#35101d55,transparent 34%),radial-gradient(ellipse at 90% 18%,#122c3a40,transparent 30%),#08090d}
+header{background:#08090deF;border-bottom:1px solid #ffffff12}
+.brand-mark{background:linear-gradient(140deg,#ff3155,#ff7146);box-shadow:0 6px 22px #ff315533}
+.brand-name{color:#ff536f!important}
+nav>a:hover{color:#ff536f}
+main{padding-top:30px}
+.hero,.panel,.channel{background:linear-gradient(145deg,#171922,#101117);border:1px solid #ffffff16;border-radius:22px;box-shadow:0 15px 45px #0004}
+.hero:after{display:block;border-color:#ff315522;box-shadow:0 0 0 30px #ff31550a,0 0 0 60px #39d9ff07}
+.btn,button{background:linear-gradient(110deg,#ff3155,#ff6048);border-color:#ff5268;border-radius:12px;box-shadow:0 8px 22px #ff31551c}
+.btn:hover,button:hover{filter:brightness(1.12);box-shadow:0 10px 30px #ff315533}
+.btn.secondary,button.secondary{background:#1b1e28;border-color:#343847}
+.field{background:#0c0e14;border-color:#343746;border-radius:13px}
+.field:focus{border-color:#ff536f;box-shadow:0 0 0 3px #ff315522}
+.tag{color:#ff657c}
+.flash{background:#19151c;border-color:#ff536f}
+.channel:hover{border-color:#ff536f80;background:linear-gradient(145deg,#20151c,#12141a)}
+a{color:#ff8193}a:hover{color:#ffb0bc}
+footer{border-color:#ffffff14}
+@media(max-width:560px){header{gap:12px}main{padding-top:22px}.hero,.panel,.channel{border-radius:17px}}
+
 </style></head><body><header><a class="brand" href="/" aria-label="YouGrow home"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 48 48" role="img"><path d="M24 3.5 43 14.4v19.2L24 44.5 5 33.6V14.4Z" fill="currentColor" opacity=".18"/><rect x="5" y="10" width="38" height="28" rx="9" fill="#ff263f"/><path d="M21 17.5 32 24 21 30.5Z" fill="#fff"/></svg></span><span>You<span class="brand-name">Grow</span></span></a><nav><a href="/">Discover</a><a href="/dashboard">Dashboard</a>{% if user %}<a class="nav-icon youtube-icon" href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer" aria-label="YouTube" title="Open YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8ZM9.6 15.6V8.4L15.8 12Z"/></svg></a><a class="nav-icon user-icon" href="/dashboard" aria-label="Your account" title="Your account"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm0 2c-4.4 0-8 2.2-8 5v2h16v-2c0-2.8-3.6-5-8-5Z"/></svg></a><form class="inline" method="post" action="/logout"><input type="hidden" name="_csrf" value="{{ csrf_token() }}"><button class="btn secondary">Log out ↗</button></form>{% else %}<a class="nav-icon youtube-icon" href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer" aria-label="YouTube" title="Open YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8ZM9.6 15.6V8.4L15.8 12Z"/></svg></a><a class="nav-icon user-icon" href="/login" aria-label="Log in to your account" title="Log in"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm0 2c-4.4 0-8 2.2-8 5v2h16v-2c0-2.8-3.6-5-8-5Z"/></svg></a><a class="btn" href="/register">Join free ↗</a>{% endif %}</nav></header><main>{% for message in get_flashed_messages() %}<div class="flash">{{message}}</div>{% endfor %}{% block body %}{% endblock %}</main><footer>Made for creators. Built for genuine discovery. <span class="footer-dot">●</span> YouGrow</footer></body></html>
