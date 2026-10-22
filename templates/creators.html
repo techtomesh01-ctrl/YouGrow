@@ -26,6 +26,14 @@
     <p class="muted">Discover approved channels, explore each creator's content, and reach out through their public channel to plan genuine collaborations.</p>
     <div class="actions"><a class="btn" href="{{ url_for('add_channel') }}">＋ Submit my channel</a><a class="btn alt" href="{{ url_for('dashboard') }}">← Back to dashboard</a></div>
   </section>
+  <section class="card" style="margin-top:18px;border-color:#6d5bd6;background:radial-gradient(ellipse at 90% 10%,#8b70ff35,transparent 40%),linear-gradient(120deg,#211b3b,#171521);display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap">
+    <div style="min-width:0;flex:1">
+      <span class="tag">★ Featured creator</span>
+      <h2 style="font-size:1.35rem;margin:10px 0 5px">TechTomesh01</h2>
+      <p class="muted" style="margin:0">Explore the creator's YouTube videos and connect for genuine collaborations.</p>
+    </div>
+    <a class="btn" href="https://www.youtube.com/@Techtomesh01" target="_blank" rel="noopener noreferrer">Visit TechTomesh01 ↗</a>
+  </section>
   <form method="get" action="{{ url_for('creators') }}" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(150px,.45fr) auto;gap:10px;margin-top:22px;align-items:center">
     <input class="field" style="margin:0" type="search" name="q" maxlength="80" value="{{ search_term }}" placeholder="Search channel, creator or topic" aria-label="Search creators">
     <select class="field" style="margin:0" name="category" aria-label="Filter by category">
