@@ -154,8 +154,11 @@ def register():
         email = request.form.get("email","").strip().lower()
         name = request.form.get("display_name","").strip()[:80]
         password = request.form.get("password","")
-        if not email or "@" not in email or not name or len(password) < 10:
-            flash("Enter a valid email/name and password with at least 10 characters.")
+        if not email or "@" not in email or not name or len(password) < 6:
+            flash("Enter a valid email, name and password with at least 6 characters.")
+            return render_template("register.html")
+        if request.form.get("agree_terms") != "yes":
+            flash("Please agree to the Terms and Privacy Policy to create your account.")
             return render_template("register.html")
         try:
             with connect() as conn:
