@@ -1,1 +1,49 @@
-{% extends "base.html" %}{% block title %}Your Dashboard · YouGrow{% endblock %}{% block body %}<section class="hero" style="background:radial-gradient(ellipse at 100% 0%,#f3263f20,transparent 48%),linear-gradient(145deg,#19191f,#111114)"><div class="tag">YOUR CREATOR SPACE</div><h1>Welcome back,<br><span style="color:var(--red2)">{{user.display_name}}</span></h1><p class="muted">Your creator journey, all in one place. Keep your channel details fresh and discover your next opportunity.</p><div class="grid" style="margin:28px 0 24px;max-width:650px"><div style="padding:18px;border:1px solid #ffffff13;border-radius:16px;background:#ffffff06"><small>YOUR POINTS BALANCE</small><div style="font-size:2rem;font-weight:900;letter-spacing:-.04em;color:var(--red2)">{{user.points_balance}}</div><span class="muted" style="font-size:.85rem">Available points</span></div><div style="padding:18px;border:1px solid #ffffff13;border-radius:16px;background:#ffffff06"><small>YOUR CREATOR SPACE</small><div style="font-size:1.2rem;font-weight:850;margin-top:7px">Ready to grow</div><span class="muted" style="font-size:.85rem">Share your channel</span></div></div><a class="btn" href="/channels/add">＋ Submit a channel</a>{% if user.role=='admin' %} <a class="btn secondary" href="/admin">Admin Panel ↗</a>{% endif %}</section><div class="row"><div><div class="tag">YOUR CONTENT</div><h2 style="margin:5px 0">Your channels</h2></div><a class="btn secondary" href="/channels/add">＋ Add channel</a></div>{% for c in channels %}<div class="panel"><div class="row"><div><span class="tag">{{c.category}}</span><h3 style="margin:7px 0">{{c.title}}</h3></div><span class="tag" style="color:{{'#ff7180' if c.approved else '#b5b0be'}}">{{'✓ Approved' if c.approved else '◷ Pending review'}}</span></div><p><a href="{{c.youtube_url}}" target="_blank" rel="noopener noreferrer">Open YouTube ↗</a></p></div>{% else %}<div class="empty-state"><div style="font-size:2rem;color:var(--red2)">＋</div><h3 style="color:var(--text)">Your first channel starts here</h3><p>Submit your channel for review. Once approved, it can appear in creator discovery.</p><a class="btn" href="/channels/add">Submit my channel ↗</a></div>{% endfor %}<div style="margin-top:34px"><div class="tag">ACTIVITY</div><h2 style="margin:5px 0 14px">Points history</h2>{% for l in ledger %}<div class="panel row" style="padding:18px 22px"><span><strong>{{l.action}}</strong><br><small>{{l.created_at}}</small></span><strong style="font-size:1.15rem;color:{{'#ff7180' if l.delta>0 else '#d0ccd5'}}">{{'+' if l.delta>0 else ''}}{{l.delta}}</strong></div>{% else %}<div class="panel muted">No activity yet. Your eligible in-app activity will appear here.</div>{% endfor %}<p class="muted" style="font-size:.88rem">Points are for eligible in-app tasks only. No points are awarded for subscribing, viewing, liking, commenting on or sharing YouTube content.</p></div>{% endblock %}
+{% extends "base.html" %}
+{% block title %}Your Dashboard · YouGrow{% endblock %}
+{% block body %}
+<style>
+.dash-wrap{display:grid;grid-template-columns:270px minmax(0,1fr);gap:22px;align-items:start}.profile-card,.dash-card{background:linear-gradient(145deg,#151515,#101010);border:1px solid #292929;border-radius:22px;padding:24px}.profile-card{position:sticky;top:95px;text-align:center}.avatar{width:112px;height:112px;border-radius:50%;object-fit:cover;border:3px solid #b00020;box-shadow:0 0 0 7px #b000201c;margin:0 auto 15px;display:block}.avatar-fallback{display:grid;place-items:center;background:linear-gradient(145deg,#b00020,#3b0914);color:#fff;font-size:2.4rem;font-weight:900}.upload-label{display:inline-flex;cursor:pointer;border:1px solid #3b3b3b;background:#202020;border-radius:999px;padding:9px 14px;font-size:.82rem;font-weight:750;margin:5px 0 12px}.dash-main{min-width:0}.welcome{padding:clamp(24px,4vw,42px);border-radius:24px;background:radial-gradient(ellipse at 100% 0%,#b0002030,transparent 45%),linear-gradient(135deg,#1a1114,#101010);border:1px solid #3a2529}.welcome h1{font-size:clamp(2.1rem,5vw,3.8rem);letter-spacing:-.065em;line-height:1.02;margin:14px 0}.welcome p{color:#aaa;max-width:650px}.stat-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:20px 0}.stat{padding:19px;border:1px solid #292929;background:#141414;border-radius:17px;min-width:0}.stat .num{font-size:clamp(1.35rem,3vw,2rem);font-weight:900;letter-spacing:-.05em;margin-top:7px;overflow-wrap:anywhere}.section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:30px 0 12px}.channel-row{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:19px;border:1px solid #292929;background:#121212;border-radius:16px;margin:10px 0}.status{font-size:.76rem;font-weight:800;border-radius:999px;padding:6px 10px;background:#252525;white-space:nowrap}.status.ok{color:#80e2a3;background:#12301f}.status.pending{color:#ffca75;background:#332713}.history{display:grid;gap:9px}.history-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:15px 17px;background:#131313;border:1px solid #262626;border-radius:14px}.positive{color:#80e2a3}.muted-note{color:#969696;font-size:.86rem}@media(max-width:780px){.dash-wrap{grid-template-columns:1fr}.profile-card{position:static}.stat-grid{grid-template-columns:1fr 1fr}.stat:last-child{grid-column:1/-1}}@media(max-width:450px){.stat-grid{grid-template-columns:1fr}.stat:last-child{grid-column:auto}.channel-row{align-items:flex-start;flex-direction:column}}
+</style>
+<div class="dash-wrap">
+<aside class="profile-card">
+{% if user.profile_image %}<img class="avatar" src="{{user.profile_image}}" alt="Your profile photo">{% else %}<div class="avatar avatar-fallback">{{(user.display_name or user.email or 'Y')[0]|upper}}</div>{% endif %}
+<h2 style="font-size:1.3rem;margin:0 0 3px">{{user.display_name}}</h2>
+<p class="muted" style="font-size:.88rem;overflow-wrap:anywhere;margin:0 0 15px">{{user.email}}</p>
+<form method="post" action="{{url_for('upload_profile_photo')}}" enctype="multipart/form-data">
+<input type="hidden" name="_csrf" value="{{csrf_token()}}">
+<label class="upload-label" for="profile-photo">📷 Change photo</label>
+<input id="profile-photo" type="file" name="photo" accept="image/jpeg,image/png,image/webp" required style="display:none" onchange="this.form.requestSubmit()">
+<small style="display:block;margin-bottom:14px">JPG, PNG or WEBP · max 2 MB</small>
+</form>
+<hr style="border-color:#292929;margin:18px 0">
+<div class="tag">ACCOUNT STATUS</div><p style="margin:6px 0 14px"><span class="status ok">● Active creator</span></p>
+<a class="btn secondary" href="/channels/add" style="width:100%">＋ Add a channel</a>
+{% if user.role=='admin' %}<a class="btn" href="/admin" style="width:100%;margin-top:9px">Admin panel ↗</a>{% endif %}
+</aside>
+<div class="dash-main">
+<section class="welcome">
+<div class="tag">✦ YOUR CREATOR SPACE</div>
+<h1>Good to see you,<br><span style="color:#ff5269">{{user.display_name}}</span></h1>
+<p>Your creator journey starts here. Manage your channel submissions, track your points, and keep everything organized in one place.</p>
+<a class="btn" href="/channels/add">＋ Submit a channel</a>
+</section>
+<div class="stat-grid">
+<div class="stat"><small>POINTS BALANCE</small><div class="num" style="color:#ff5269">{{user.points_balance}}</div><small>Available points</small></div>
+<div class="stat"><small>YOUR CHANNELS</small><div class="num">{{channels|length}}</div><small>Submitted by you</small></div>
+<div class="stat"><small>APPROVED</small><div class="num">{{channels|selectattr('approved')|list|length}}</div><small>Ready for discovery</small></div>
+</div>
+<div class="section-head"><div><div class="tag">YOUR CONTENT</div><h2 style="margin:3px 0">Your channels</h2></div><a class="btn secondary" href="/channels/add">＋ Add channel</a></div>
+{% for c in channels %}
+<div class="channel-row"><div style="min-width:0"><span class="tag">{{c.category}}</span><h3 style="margin:4px 0 7px;overflow-wrap:anywhere">{{c.title}}</h3><a href="{{c.youtube_url}}" target="_blank" rel="noopener noreferrer">Open YouTube ↗</a></div><span class="status {{'ok' if c.approved else 'pending'}}">{{'✓ Approved' if c.approved else '◷ Pending review'}}</span></div>
+{% else %}
+<div class="dash-card" style="text-align:center;padding:32px 20px"><div style="font-size:2.2rem">🎬</div><h3>Your first channel starts here</h3><p class="muted">Submit your YouTube channel for admin review. Once approved, it can appear in creator discovery.</p><a class="btn" href="/channels/add">Submit my channel ↗</a></div>
+{% endfor %}
+<div class="section-head"><div><div class="tag">RECENT ACTIVITY</div><h2 style="margin:3px 0">Points history</h2></div></div>
+<div class="history">
+{% for l in ledger %}<div class="history-row"><div><strong>{{l.action}}</strong><br><small>{{l.created_at}}</small></div><strong class="{{'positive' if l.delta>0 else ''}}" style="font-size:1.1rem">{{'+' if l.delta>0 else ''}}{{l.delta}}</strong></div>
+{% else %}<div class="dash-card muted">No activity yet. Eligible in-app activity will appear here.</div>{% endfor %}
+</div>
+<p class="muted-note" style="margin-top:16px">Points are for eligible in-app tasks only. No points are awarded for subscribing to, viewing, liking, commenting on or sharing YouTube content.</p>
+</div>
+</div>
+{% endblock %}
