@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Discover Creators · YouGrow{% endblock %}
+{% block body %}
+<style>
+.discovery{max-width:1100px;margin:0 auto;color:#f7f7fb}
+.discovery .hero{padding:clamp(25px,4vw,42px);border:1px solid #454075;border-radius:24px;background:radial-gradient(ellipse at 85% 10%,#7777ff50,transparent 38%),linear-gradient(120deg,#1b1b31,#171521)}
+.discovery .eyebrow{font-size:.72rem;text-transform:uppercase;letter-spacing:.15em;font-weight:850;color:#aaa9ff}
+.discovery h1{font-size:clamp(2rem,5vw,3.6rem);line-height:1.04;letter-spacing:-.06em;margin:12px 0}
+.discovery .muted{color:#b7b8cc}
+.discovery .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.discovery .btn{display:inline-flex;padding:11px 15px;border-radius:11px;background:linear-gradient(100deg,#7777ff,#9d6be8);color:#fff!important;font-weight:850}
+.discovery .btn.alt{background:#ffffff0a;border:1px solid #ffffff25}
+.discovery .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:22px}
+.discovery .card{min-width:0;padding:20px;border:1px solid #2c2e42;border-radius:18px;background:linear-gradient(145deg,#181927,#12131c)}
+.discovery .tag{display:inline-flex;padding:6px 9px;border-radius:999px;background:#292849;color:#c5c4ff;font-size:.72rem;font-weight:850}
+.discovery h2{font-size:1.15rem;margin:12px 0 7px;overflow-wrap:anywhere}
+.discovery p{line-height:1.6}
+.discovery .empty{padding:30px;text-align:center;border:1px dashed #45465f;border-radius:18px;margin-top:22px}
+@media(max-width:760px){.discovery .grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){.discovery .grid{grid-template-columns:1fr}}
+</style>
+<div class="discovery">
+  <section class="hero">
+    <div class="eyebrow">YouGrow · Creator community</div>
+    <h1>Find creators.<br>Make something together.</h1>
+    <p class="muted">Discover approved channels, explore each creator's content, and reach out through their public channel to plan genuine collaborations.</p>
+    <div class="actions"><a class="btn" href="{{ url_for('add_channel') }}">＋ Submit my channel</a><a class="btn alt" href="{{ url_for('dashboard') }}">← Back to dashboard</a></div>
+  </section>
+  {% if creators %}
+  <div class="grid">
+    {% for c in creators %}
+    <article class="card">
+      <span class="tag">{{ c.category or 'Creator' }}</span>
+      <h2>{{ c.title }}</h2>
+      <div class="muted" style="font-size:.85rem">By {{ c.display_name }}</div>
+      {% if c.description %}<p class="muted">{{ c.description }}</p>{% else %}<p class="muted">Open this creator's channel to explore their content and collaboration opportunities.</p>{% endif %}
+      <a class="btn" href="{{ c.youtube_url }}" target="_blank" rel="noopener noreferrer">Visit channel ↗</a>
+    </article>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty"><h2>No other approved creators yet</h2><p class="muted">Be among the first: submit your channel and invite other creators to join YouGrow.</p><a class="btn" href="{{ url_for('add_channel') }}">Submit my channel</a></div>
+  {% endif %}
+  <p class="muted" style="font-size:.82rem;margin-top:18px">Community rule: collaborate through real content and genuine audiences. YouGrow does not reward or coordinate fake views, likes, comments, shares, or subscriber exchanges.</p>
+</div>
+{% endblock %}
