@@ -4,6 +4,7 @@ from functools import wraps
 import psycopg2
 from psycopg2.extras import RealDictCursor
 from flask import Flask, abort, flash, redirect, render_template, request, session, url_for
+from authlib.integrations.flask_client import OAuth
 from werkzeug.security import check_password_hash, generate_password_hash
 from policy import POINT_RULES, FORBIDDEN_REWARD_ACTIONS, validate_youtube_url
 
@@ -17,6 +18,10 @@ PREMIUM_MEMBER_THRESHOLD = 1000
 PREMIUM_MONTHLY_PRICE_INR = 99
 ADSENSE_CLIENT_ID = os.environ.get("ADSENSE_CLIENT_ID", "").strip()
 ADSENSE_SLOT_ID = os.environ.get("ADSENSE_SLOT_ID", "").strip()
+GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", "").strip()
+GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET", "").strip()
+oauth = OAuth(app)
+google = oauth.register(name="google", client_id=GOOGLE_CLIENT_ID or None, client_secret=GOOGLE_CLIENT_SECRET or None, server_metadata_url="https://accounts.google.com/.well-known/openid-configuration", client_kwargs={"scope": "openid email profile"})
 
 def connect():
     if not DATABASE_URL:
@@ -49,6 +54,9 @@ def init_db():
     with connect() as conn:
         with conn.cursor() as cur:
             cur.execute(ddl)
+            # Additive migration: existing password accounts remain available.
+            cur.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS google_sub TEXT")
+            cur.execute("CREATE UNIQUE INDEX IF NOT EXISTS users_google_sub_unique ON users(google_sub) WHERE google_sub IS NOT NULL")
 
 # Initialize tables lazily on the first request. CREATE TABLE IF NOT EXISTS is safe
 # across multiple Gunicorn workers and keeps a fresh Render database bootable.
@@ -186,7 +194,54 @@ def login():
             session["user_id"] = row["id"]
             return redirect(url_for("dashboard"))
         flash("Email or password is incorrect.")
-    return render_template("login.html")
+    return render_template("login.html", google_login_enabled=bool(GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET))
+
+@app.get("/auth/google")
+def google_login():
+    if not GOOGLE_CLIENT_ID or not GOOGLE_CLIENT_SECRET:
+        flash("Google sign-in is not configured yet. The site owner must add GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in Render.")
+        return redirect(url_for("login"))
+    session["oauth_next"] = request.args.get("next", "")
+    redirect_uri = url_for("google_callback", _external=True, _scheme="https" if request.is_secure or request.headers.get("X-Forwarded-Proto") == "https" else "http")
+    return google.authorize_redirect(redirect_uri, prompt="select_account")
+
+@app.get("/auth/google/callback")
+def google_callback():
+    if not GOOGLE_CLIENT_ID or not GOOGLE_CLIENT_SECRET:
+        flash("Google sign-in is not configured yet.")
+        return redirect(url_for("login"))
+    try:
+        token = google.authorize_access_token()
+        info = token.get("userinfo") or google.userinfo()
+        email = (info.get("email") or "").strip().lower()
+        google_sub = (info.get("sub") or "").strip()
+        name = (info.get("name") or email.split("@")[0] or "YouGrow creator").strip()[:80]
+        if not email or not google_sub or not info.get("email_verified", False):
+            flash("Google did not provide a verified email. Please try another account.")
+            return redirect(url_for("login"))
+        with connect() as conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT id,google_sub FROM users WHERE google_sub=%s OR email=%s ORDER BY CASE WHEN google_sub=%s THEN 0 ELSE 1 END LIMIT 1", (google_sub, email, google_sub))
+                row = cur.fetchone()
+                if row:
+                    if row.get("google_sub") and row["google_sub"] != google_sub:
+                        flash("This email is already linked to a different Google account. Use your existing sign-in method.")
+                        return redirect(url_for("login"))
+                    cur.execute("UPDATE users SET google_sub=%s WHERE id=%s AND (google_sub IS NULL OR google_sub=%s)", (google_sub, row["id"], google_sub))
+                    uid = row["id"]
+                else:
+                    cur.execute("INSERT INTO users(email,password_hash,display_name,google_sub) VALUES(%s,%s,%s,%s) RETURNING id", (email, generate_password_hash(secrets.token_urlsafe(32)), name, google_sub))
+                    uid = cur.fetchone()["id"]
+        session.clear()
+        session["user_id"] = uid
+        next_path = session.pop("oauth_next", "")
+        if next_path.startswith("/") and not next_path.startswith("//"):
+            return redirect(next_path)
+        return redirect(url_for("dashboard"))
+    except Exception:
+        app.logger.exception("Google OAuth sign-in failed")
+        flash("Google sign-in failed. Please try again or use email and password.")
+        return redirect(url_for("login"))
 
 @app.post("/logout")
 def logout():
