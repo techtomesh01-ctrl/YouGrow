@@ -26,7 +26,17 @@
     <p class="muted">Discover approved channels, explore each creator's content, and reach out through their public channel to plan genuine collaborations.</p>
     <div class="actions"><a class="btn" href="{{ url_for('add_channel') }}">＋ Submit my channel</a><a class="btn alt" href="{{ url_for('dashboard') }}">← Back to dashboard</a></div>
   </section>
+  <form method="get" action="{{ url_for('creators') }}" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(150px,.45fr) auto;gap:10px;margin-top:22px;align-items:center">
+    <input class="field" style="margin:0" type="search" name="q" maxlength="80" value="{{ search_term }}" placeholder="Search channel, creator or topic" aria-label="Search creators">
+    <select class="field" style="margin:0" name="category" aria-label="Filter by category">
+      <option value="">All categories</option>
+      {% for item in ['Education','Gaming','Technology','Entertainment','Music','Other'] %}<option value="{{ item }}" {% if selected_category==item %}selected{% endif %}>{{ item }}</option>{% endfor %}
+    </select>
+    <button type="submit">Search</button>
+  </form>
+  <style>@media(max-width:620px){.discovery form[method=get]{grid-template-columns:1fr!important}}</style>
   {% if creators %}
+  <p class="muted" style="margin:18px 0 0;font-size:.85rem">Showing {{ creators|length }} approved creator{{ '' if creators|length==1 else 's' }}{% if search_term %} matching “{{ search_term }}”{% endif %}{% if selected_category %} in {{ selected_category }}{% endif %}.</p>
   <div class="grid">
     {% for c in creators %}
     <article class="card">
@@ -39,7 +49,7 @@
     {% endfor %}
   </div>
   {% else %}
-  <div class="empty"><h2>No other approved creators yet</h2><p class="muted">Be among the first: submit your channel and invite other creators to join YouGrow.</p><a class="btn" href="{{ url_for('add_channel') }}">Submit my channel</a></div>
+  <div class="empty"><h2>No matching creators found</h2><p class="muted">Try a different search or category, or submit your own channel for review.</p><a class="btn" href="{{ url_for('add_channel') }}">Submit my channel</a></div>
   {% endif %}
   <p class="muted" style="font-size:.82rem;margin-top:18px">Community rule: collaborate through real content and genuine audiences. YouGrow does not reward or coordinate fake views, likes, comments, shares, or subscriber exchanges.</p>
 </div>
