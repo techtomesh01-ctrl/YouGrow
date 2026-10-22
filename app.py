@@ -275,7 +275,7 @@ def upload_profile_photo():
     if not raw or len(raw) > 2 * 1024 * 1024:
         flash("Photo must be under 2 MB.")
         return redirect(url_for("dashboard"))
-    signatures = {"image/jpeg": raw.startswith(b"\\xff\\xd8\\xff"), "image/png": raw.startswith(b"\\x89PNG\\r\\n\\x1a\\n"), "image/webp": len(raw) >= 12 and raw[:4] == b"RIFF" and raw[8:12] == b"WEBP"}
+    signatures = {"image/jpeg": raw.startswith(bytes([0xff, 0xd8, 0xff])), "image/png": raw.startswith(bytes([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a])), "image/webp": len(raw) >= 12 and raw[:4] == b"RIFF" and raw[8:12] == b"WEBP"}
     if not signatures.get(mime, False):
         flash("The selected file does not look like a valid image.")
         return redirect(url_for("dashboard"))
