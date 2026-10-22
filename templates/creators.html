@@ -2,63 +2,76 @@
 {% block title %}Discover Creators · YouGrow{% endblock %}
 {% block body %}
 <style>
-.discovery{max-width:1100px;margin:0 auto;color:#f7f7fb}
-.discovery .hero{padding:clamp(25px,4vw,42px);border:1px solid #454075;border-radius:24px;background:radial-gradient(ellipse at 85% 10%,#7777ff50,transparent 38%),linear-gradient(120deg,#1b1b31,#171521)}
-.discovery .eyebrow{font-size:.72rem;text-transform:uppercase;letter-spacing:.15em;font-weight:850;color:#aaa9ff}
-.discovery h1{font-size:clamp(2rem,5vw,3.6rem);line-height:1.04;letter-spacing:-.06em;margin:12px 0}
-.discovery .muted{color:#b7b8cc}
-.discovery .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
-.discovery .btn{display:inline-flex;padding:11px 15px;border-radius:11px;background:linear-gradient(100deg,#7777ff,#9d6be8);color:#fff!important;font-weight:850}
-.discovery .btn.alt{background:#ffffff0a;border:1px solid #ffffff25}
-.discovery .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:22px}
-.discovery .card{min-width:0;padding:20px;border:1px solid #2c2e42;border-radius:18px;background:linear-gradient(145deg,#181927,#12131c)}
-.discovery .tag{display:inline-flex;padding:6px 9px;border-radius:999px;background:#292849;color:#c5c4ff;font-size:.72rem;font-weight:850}
-.discovery h2{font-size:1.15rem;margin:12px 0 7px;overflow-wrap:anywhere}
-.discovery p{line-height:1.6}
-.discovery .empty{padding:30px;text-align:center;border:1px dashed #45465f;border-radius:18px;margin-top:22px}
-@media(max-width:760px){.discovery .grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:520px){.discovery .grid{grid-template-columns:1fr}}
+.yg-discover{max-width:1120px;margin:0 auto;color:#f7f7f7}
+.yg-discover *{box-sizing:border-box}
+.yg-discover .eyebrow{font-size:.72rem;text-transform:uppercase;letter-spacing:.18em;font-weight:900;color:#ff5368}
+.yg-discover .hero{position:relative;isolation:isolate;overflow:hidden;min-height:310px;padding:clamp(26px,5vw,56px);border:1px solid #382027;border-radius:22px;background:radial-gradient(ellipse at 85% 15%,#a3002733,transparent 38%),linear-gradient(115deg,#171012,#0d0d10 70%);margin:0 0 24px}
+.yg-discover .hero:after{content:"YG";position:absolute;z-index:-1;right:2%;top:0;font-size:clamp(9rem,24vw,18rem);font-weight:1000;letter-spacing:-.12em;line-height:1;color:#ffffff06;pointer-events:none}
+.yg-discover h1{font-size:clamp(2.6rem,7vw,5.2rem);line-height:.96;letter-spacing:-.075em;max-width:760px;margin:15px 0}
+.yg-discover h1 span{color:#ff334f}
+.yg-discover p{line-height:1.7}
+.yg-discover .muted{color:#aaa5ab}
+.yg-discover .hero-copy{max-width:640px;color:#c8c1c7}
+.yg-discover .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.yg-discover .btn{display:inline-flex;align-items:center;justify-content:center;padding:11px 16px;border-radius:8px;background:#a40024;color:#fff!important;font-weight:850;border:1px solid #b71937}
+.yg-discover .btn.alt{background:#ffffff08;border-color:#ffffff22}
+.yg-discover .featured{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;padding:clamp(20px,3vw,30px);border:1px solid #632032;border-radius:17px;background:radial-gradient(ellipse at 95% 10%,#a400242b,transparent 42%),linear-gradient(120deg,#201015,#111113);margin:0 0 24px}
+.yg-discover .featured-left{display:flex;align-items:center;gap:17px;min-width:0;flex:1}
+.yg-discover .avatar{display:grid;place-items:center;flex:0 0 64px;height:64px;border-radius:17px;background:linear-gradient(140deg,#e21b43,#620018);font-weight:1000;font-size:1.45rem;box-shadow:0 8px 30px #b0002033}
+.yg-discover .featured h2{font-size:clamp(1.2rem,3vw,1.7rem);margin:7px 0 2px;letter-spacing:-.04em}
+.yg-discover .featured p{margin:0;font-size:.9rem}
+.yg-discover .tag{display:inline-flex;align-items:center;gap:6px;border:1px solid #81243a;background:#410e1c;color:#ff9aaa;padding:5px 9px;border-radius:5px;font-size:.7rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase}
+.yg-discover .searchbar{display:grid;grid-template-columns:minmax(0,1fr) minmax(160px,.38fr) auto;gap:10px;align-items:center;padding:14px;border:1px solid #292929;background:#111;border-radius:14px;margin-bottom:15px}
+.yg-discover .searchbar .field{margin:0}
+.yg-discover .resultline{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:.84rem;margin:15px 2px}
+.yg-discover .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.yg-discover .creator{min-width:0;display:flex;flex-direction:column;padding:20px;border:1px solid #292929;border-radius:15px;background:linear-gradient(150deg,#171717,#101010);transition:transform .2s,border-color .2s}
+.yg-discover .creator:hover{transform:translateY(-3px);border-color:#8f2338}
+.yg-discover .creator .tag{align-self:flex-start}
+.yg-discover .creator h3{font-size:1.13rem;line-height:1.35;margin:14px 0 3px;overflow-wrap:anywhere}
+.yg-discover .byline{font-size:.83rem;color:#b0aab0}
+.yg-discover .description{font-size:.9rem;color:#bdb7bd;flex:1;overflow-wrap:anywhere}
+.yg-discover .creator .btn{align-self:flex-start;margin-top:9px}
+.yg-discover .empty{padding:35px 20px;text-align:center;border:1px dashed #49323a;border-radius:16px;background:#111;margin-top:12px}
+.yg-discover .rule{margin-top:22px;padding:14px 16px;border-left:3px solid #a40024;background:#141414;color:#aaa5ab;font-size:.82rem}
+@media(max-width:760px){.yg-discover .grid{grid-template-columns:repeat(2,minmax(0,1fr))}.yg-discover .searchbar{grid-template-columns:1fr 1fr}.yg-discover .searchbar button{grid-column:1/-1}}
+@media(max-width:520px){.yg-discover .grid{grid-template-columns:1fr}.yg-discover .searchbar{grid-template-columns:1fr}.yg-discover .searchbar button{grid-column:auto}.yg-discover .hero{min-height:0}.yg-discover .featured-left{align-items:flex-start}.yg-discover .avatar{flex-basis:52px;height:52px}}
 </style>
-<div class="discovery">
+<div class="yg-discover">
   <section class="hero">
-    <div class="eyebrow">YouGrow · Creator community</div>
-    <h1>Find creators.<br>Make something together.</h1>
-    <p class="muted">Discover approved channels, explore each creator's content, and reach out through their public channel to plan genuine collaborations.</p>
-    <div class="actions"><a class="btn" href="{{ url_for('add_channel') }}">＋ Submit my channel</a><a class="btn alt" href="{{ url_for('dashboard') }}">← Back to dashboard</a></div>
+    <div class="eyebrow">YouGrow / Creator network</div>
+    <h1>Your next audience<br>starts <span>here.</span></h1>
+    <p class="hero-copy">Discover creators, find channels in your niche, and build genuine partnerships through content, ideas and collaboration.</p>
+    <div class="actions"><a class="btn" href="{{ url_for('add_channel') }}">＋ Submit my channel</a><a class="btn alt" href="{{ url_for('dashboard') }}">Creator dashboard ↗</a></div>
   </section>
-  <section class="card" style="margin-top:18px;border-color:#6d5bd6;background:radial-gradient(ellipse at 90% 10%,#8b70ff35,transparent 40%),linear-gradient(120deg,#211b3b,#171521);display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap">
-    <div style="min-width:0;flex:1">
-      <span class="tag">★ Featured creator</span>
-      <h2 style="font-size:1.35rem;margin:10px 0 5px">TechTomesh01</h2>
-      <p class="muted" style="margin:0">Explore the creator's YouTube videos and connect for genuine collaborations.</p>
-    </div>
-    <a class="btn" href="https://www.youtube.com/@Techtomesh01" target="_blank" rel="noopener noreferrer">Visit TechTomesh01 ↗</a>
+  <section class="featured">
+    <div class="featured-left"><div class="avatar">TT</div><div style="min-width:0"><span class="tag">★ Featured creator</span><h2>TechTomesh01</h2><p class="muted">Technology · Tutorials · Creator content</p></div></div>
+    <a class="btn" href="https://www.youtube.com/@Techtomesh01" target="_blank" rel="noopener noreferrer">Visit YouTube channel ↗</a>
   </section>
-  <form method="get" action="{{ url_for('creators') }}" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(150px,.45fr) auto;gap:10px;margin-top:22px;align-items:center">
-    <input class="field" style="margin:0" type="search" name="q" maxlength="80" value="{{ search_term }}" placeholder="Search channel, creator or topic" aria-label="Search creators">
-    <select class="field" style="margin:0" name="category" aria-label="Filter by category">
+  <form class="searchbar" method="get" action="{{ url_for('creators') }}">
+    <input class="field" type="search" name="q" maxlength="80" value="{{ search_term }}" placeholder="Search creators, channels or topics" aria-label="Search creators">
+    <select class="field" name="category" aria-label="Filter by category">
       <option value="">All categories</option>
       {% for item in ['Education','Gaming','Technology','Entertainment','Music','Other'] %}<option value="{{ item }}" {% if selected_category==item %}selected{% endif %}>{{ item }}</option>{% endfor %}
     </select>
-    <button type="submit">Search</button>
+    <button type="submit">Search creators</button>
   </form>
-  <style>@media(max-width:620px){.discovery form[method=get]{grid-template-columns:1fr!important}}</style>
   {% if creators %}
-  <p class="muted" style="margin:18px 0 0;font-size:.85rem">Showing {{ creators|length }} approved creator{{ '' if creators|length==1 else 's' }}{% if search_term %} matching “{{ search_term }}”{% endif %}{% if selected_category %} in {{ selected_category }}{% endif %}.</p>
+  <div class="resultline"><span class="eyebrow">Explore the community</span><span class="muted">{{ creators|length }} approved creator{{ '' if creators|length==1 else 's' }}{% if search_term %} · results for “{{ search_term }}”{% endif %}{% if selected_category %} · {{ selected_category }}{% endif %}</span></div>
   <div class="grid">
     {% for c in creators %}
-    <article class="card">
+    <article class="creator">
       <span class="tag">{{ c.category or 'Creator' }}</span>
-      <h2>{{ c.title }}</h2>
-      <div class="muted" style="font-size:.85rem">By {{ c.display_name }}</div>
-      {% if c.description %}<p class="muted">{{ c.description }}</p>{% else %}<p class="muted">Open this creator's channel to explore their content and collaboration opportunities.</p>{% endif %}
+      <h3>{{ c.title }}</h3>
+      <div class="byline">Created by {{ c.display_name }}</div>
+      <p class="description">{{ c.description or "Visit this creator's channel to explore their content and collaboration opportunities." }}</p>
       <a class="btn" href="{{ c.youtube_url }}" target="_blank" rel="noopener noreferrer">Visit channel ↗</a>
     </article>
     {% endfor %}
   </div>
   {% else %}
-  <div class="empty"><h2>No matching creators found</h2><p class="muted">Try a different search or category, or submit your own channel for review.</p><a class="btn" href="{{ url_for('add_channel') }}">Submit my channel</a></div>
+  <div class="empty"><div class="eyebrow">No matches yet</div><h2>No creators found</h2><p class="muted">Try another search or category. You can also submit a channel for review.</p><a class="btn" href="{{ url_for('add_channel') }}">Submit a channel</a></div>
   {% endif %}
-  <p class="muted" style="font-size:.82rem;margin-top:18px">Community rule: collaborate through real content and genuine audiences. YouGrow does not reward or coordinate fake views, likes, comments, shares, or subscriber exchanges.</p>
+  <div class="rule">Community standard: YouGrow supports genuine creator discovery and collaborations. It does not reward or coordinate fake views, likes, comments, shares, or subscriber exchanges.</div>
 </div>
 {% endblock %}
