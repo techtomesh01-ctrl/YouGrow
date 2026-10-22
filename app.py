@@ -330,6 +330,22 @@ def report_channel(channel_id):
         flash("Report submitted for review.")
     return redirect(url_for("index"))
 
+@app.get("/creators")
+@login_required
+def creators():
+    """Discover approved creators for genuine collaboration, not engagement exchanges."""
+    user = current_user()
+    with connect() as conn:
+        with conn.cursor() as cur:
+            cur.execute(
+                "SELECT c.id,c.title,c.youtube_url,c.category,c.description,u.display_name "
+                "FROM channels c JOIN users u ON u.id=c.user_id "
+                "WHERE c.approved=TRUE AND c.user_id<>%s ORDER BY c.created_at DESC LIMIT 100",
+                (user["id"],)
+            )
+            creators_list = cur.fetchall()
+    return render_template("creators.html", user=user, creators=creators_list)
+
 @app.get("/admin")
 @login_required
 def admin():
