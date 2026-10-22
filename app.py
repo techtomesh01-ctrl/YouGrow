@@ -333,18 +333,28 @@ def report_channel(channel_id):
 @app.get("/creators")
 @login_required
 def creators():
-    """Discover approved creators for genuine collaboration, not engagement exchanges."""
+    """Discover approved creators with safe server-side search and category filters."""
     user = current_user()
+    search_term = request.args.get("q", "").strip()[:80]
+    category = request.args.get("category", "").strip()[:40]
+    allowed_categories = {"Education", "Gaming", "Technology", "Entertainment", "Music", "Other"}
+    if category not in allowed_categories:
+        category = ""
     with connect() as conn:
         with conn.cursor() as cur:
             cur.execute(
                 "SELECT c.id,c.title,c.youtube_url,c.category,c.description,u.display_name "
                 "FROM channels c JOIN users u ON u.id=c.user_id "
-                "WHERE c.approved=TRUE AND c.user_id<>%s ORDER BY c.created_at DESC LIMIT 100",
-                (user["id"],)
+                "WHERE c.approved=TRUE AND c.user_id<>%s "
+                "AND (%s='' OR c.category=%s) "
+                "AND (%s='' OR c.title ILIKE %s OR c.description ILIKE %s OR u.display_name ILIKE %s) "
+                "ORDER BY c.created_at DESC LIMIT 100",
+                (user["id"], category, category, search_term,
+                 "%" + search_term + "%", "%" + search_term + "%", "%" + search_term + "%")
             )
             creators_list = cur.fetchall()
-    return render_template("creators.html", user=user, creators=creators_list)
+    return render_template("creators.html", user=user, creators=creators_list,
+                           search_term=search_term, selected_category=category)
 
 @app.get("/admin")
 @login_required
