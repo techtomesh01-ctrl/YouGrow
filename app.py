@@ -13,6 +13,10 @@ app.config.update(SESSION_COOKIE_HTTPONLY=True, SESSION_COOKIE_SAMESITE="Lax",
                   SESSION_COOKIE_SECURE=os.environ.get("FLASK_ENV") == "production")
 DATABASE_URL = os.environ.get("DATABASE_URL", "").strip()
 ADMIN_EMAIL = os.environ.get("ADMIN_EMAIL", "").strip().lower()
+PREMIUM_MEMBER_THRESHOLD = 1000
+PREMIUM_MONTHLY_PRICE_INR = 99
+ADSENSE_CLIENT_ID = os.environ.get("ADSENSE_CLIENT_ID", "").strip()
+ADSENSE_SLOT_ID = os.environ.get("ADSENSE_SLOT_ID", "").strip()
 
 def connect():
     if not DATABASE_URL:
@@ -56,6 +60,27 @@ def ensure_database_initialized():
     if not _db_initialized:
         init_db()
         _db_initialized = True
+
+@app.context_processor
+def monetization_context():
+    # Count registered accounts from PostgreSQL; Premium stays unavailable until
+    # the threshold is reached. This does not enable payment collection by itself.
+    try:
+        with connect() as conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT COUNT(*) AS total FROM users")
+                member_count = int(cur.fetchone()["total"])
+    except Exception:
+        member_count = 0
+    return {
+        "member_count": member_count,
+        "premium_threshold": PREMIUM_MEMBER_THRESHOLD,
+        "premium_monthly_price": PREMIUM_MONTHLY_PRICE_INR,
+        "premium_unlocked": member_count >= PREMIUM_MEMBER_THRESHOLD,
+        "adsense_ready": bool(ADSENSE_CLIENT_ID and ADSENSE_SLOT_ID),
+        "adsense_client_id": ADSENSE_CLIENT_ID,
+        "adsense_slot_id": ADSENSE_SLOT_ID,
+    }
 
 def csrf_token():
     token = session.get("_csrf")
@@ -106,7 +131,7 @@ def award_points(user_id, action, idempotency_key):
 
 @app.get("/health")
 def health():
-    return {"ok": True, "app": "YouGrow", "database_configured": bool(DATABASE_URL)}
+    with connect() as conn:\n        with conn.cursor() as cur:\n            cur.execute("SELECT COUNT(*) AS total FROM users")\n            member_count = int(cur.fetchone()["total"])\n    return {"ok": True, "app": "YouGrow", "database_configured": bool(DATABASE_URL), "registered_members": member_count, "premium_unlocked": member_count >= PREMIUM_MEMBER_THRESHOLD, "premium_threshold": PREMIUM_MEMBER_THRESHOLD}
 
 @app.get("/")
 def index():
