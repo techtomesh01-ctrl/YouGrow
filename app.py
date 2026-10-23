@@ -333,7 +333,7 @@ def report_channel(channel_id):
 @app.get("/creators")
 @login_required
 def creators():
-    """Discover approved creators with safe server-side search and category filters."""
+    """Discover channels submitted by registered YouGrow users."""
     user = current_user()
     search_term = request.args.get("q", "").strip()[:80]
     category = request.args.get("category", "").strip()[:40]
@@ -342,26 +342,24 @@ def creators():
         category = ""
     with connect() as conn:
         with conn.cursor() as cur:
-            # Creator discovery opens automatically after 500 registered YouGrow users.
-            # Only channels submitted by registered users can appear; no admin approval is required.
+            # Discovery is open immediately. Only channels belonging to registered YouGrow accounts appear.
+            # No admin approval or 500-member threshold is required.
+            cur.execute(
+                "SELECT c.id,c.title,c.youtube_url,c.category,c.description,u.display_name "
+                "FROM channels c JOIN users u ON u.id=c.user_id "
+                "WHERE c.user_id<>%s "
+                "AND (%s='' OR c.category=%s) "
+                "AND (%s='' OR c.title ILIKE %s OR c.description ILIKE %s OR u.display_name ILIKE %s) "
+                "ORDER BY c.created_at DESC LIMIT 100",
+                (user["id"], category, category, search_term,
+                 "%" + search_term + "%", "%" + search_term + "%", "%" + search_term + "%")
+            )
+            creators_list = cur.fetchall()
             cur.execute("SELECT COUNT(*) AS total FROM users")
             member_count = int(cur.fetchone()["total"])
-            creators_list = []
-            if member_count >= 500:
-                cur.execute(
-                    "SELECT c.id,c.title,c.youtube_url,c.category,c.description,u.display_name "
-                    "FROM channels c JOIN users u ON u.id=c.user_id "
-                    "WHERE c.user_id<>%s "
-                    "AND (%s='' OR c.category=%s) "
-                    "AND (%s='' OR c.title ILIKE %s OR c.description ILIKE %s OR u.display_name ILIKE %s) "
-                    "ORDER BY c.created_at DESC LIMIT 100",
-                    (user["id"], category, category, search_term,
-                     "%" + search_term + "%", "%" + search_term + "%", "%" + search_term + "%")
-                )
-                creators_list = cur.fetchall()
     return render_template("creators.html", user=user, creators=creators_list,
                            search_term=search_term, selected_category=category,
-                           member_count=member_count, creator_discovery_unlocked=member_count >= 500)
+                           member_count=member_count, creator_discovery_unlocked=True)
 
 @app.get("/admin")
 @login_required
