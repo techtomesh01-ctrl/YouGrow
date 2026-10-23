@@ -8,7 +8,7 @@ Separate project scaffold. This does **not** modify CINEMA WORLD and is **not de
 - Public creator/channel directory (users choose to open YouTube themselves)
 - Points ledger restricted to permitted in-app tasks; no rewards for YouTube subscriptions, views, likes, comments, or shares
 - Admin moderation screen (requires `ADMIN_EMAIL` and admin account setup)
-- Android Kotlin WebView shell pointing to a configurable website URL
+- Native Kotlin Android starter UI (not a WebView), with Home / Discover / Tasks / Profile navigation
 - Basic tests and Render blueprint
 
 ## Run locally
@@ -26,5 +26,6 @@ For production, use HTTPS and a managed PostgreSQL database. Never commit secret
 - Admin user promotion is a manual database operation (see `docs/admin-setup.sql`).
 - Referral rewards are intentionally not automated in this starter.
 - Do not offer points, money, prizes, or reciprocal tasks for YouTube engagement. Users may discover channels, but YouTube engagement remains voluntary and unrewarded.
-- Android shell needs `BASE_URL` changed to the deployed YouGrow URL before building a release APK.
-- No deployment or live URL has been created or verified by this package.
+- Native Android UI currently uses starter/demo content. Shared registration/login, approved live creator listings, moderation and points require a secure backend API connection before production use.
+- GitHub Actions is configured to build a debug APK when Android files change; verify the workflow run and download its artifact from the Actions page.
+- No production deployment or live URL has been created or verified by this package.
