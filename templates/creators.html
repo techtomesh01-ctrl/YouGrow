@@ -49,6 +49,22 @@
 .yg-discover input,.yg-discover select{background:#0c0c10;color:#f8f8fb;border-color:#383840}.yg-discover .empty{background:#141418;border:1px solid #303038;border-radius:16px;padding:28px}
 @media(max-width:760px){.yg-discover .searchbar{grid-template-columns:1fr}.yg-discover .grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:480px){.yg-discover .grid{grid-template-columns:1fr}.yg-discover .featured-left{align-items:flex-start}}
+
+/* Final mockup alignment: cinematic creator discovery */
+.yg-discover{max-width:1240px;color:#f8f8fb}
+.yg-discover .hero{min-height:340px;border-radius:22px;padding:clamp(28px,5vw,58px);background:radial-gradient(ellipse at 82% 25%,#ff24482b,transparent 40%),linear-gradient(115deg,#09090c,#1b080e 56%,#09090c);border-color:#652032;box-shadow:0 24px 65px #0008}
+.yg-discover h1{font-size:clamp(2.7rem,6vw,4.8rem);max-width:760px}
+.yg-discover h1 span{color:#ff2448}
+.yg-discover .searchbar{background:#111115;border-color:#32232a;border-radius:15px;padding:16px}
+.yg-discover .grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.yg-discover .creator{border-radius:16px;background:linear-gradient(155deg,#1a171c,#0e0e12);border-color:#30262c;box-shadow:0 14px 36px #0005;transition:transform .18s,border-color .18s}
+.yg-discover .creator:hover{transform:translateY(-3px);border-color:#ff244877}
+.yg-discover .btn{background:linear-gradient(110deg,#ff2448,#b9002a);border-color:#ff2448;border-radius:9px}
+.yg-discover .btn.alt{background:#17171d;border-color:#393941}
+.yg-discover .featured{border-radius:18px;background:radial-gradient(ellipse at 90% 15%,#ff24482a,transparent 44%),linear-gradient(120deg,#1b0b10,#101014);border-color:#6b2033}
+@media(max-width:760px){.yg-discover .grid{grid-template-columns:repeat(2,minmax(0,1fr))}.yg-discover .searchbar{grid-template-columns:1fr}.yg-discover .hero{min-height:0}}
+@media(max-width:440px){.yg-discover .grid{grid-template-columns:1fr}}
+
 </style>
 <div class="yg-discover">
   <section class="hero">
