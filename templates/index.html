@@ -70,6 +70,36 @@
 .yg-home .ad-wrap{padding:15px;border-radius:17px;background:#fff;color:#34304a;margin:0 0 25px}
 @media(max-width:800px){.yg-home .home-hero{grid-template-columns:1fr}.yg-home .hero-art{min-height:260px}.yg-home .creator-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.yg-home .featured{grid-template-columns:auto minmax(0,1fr)}.yg-home .featured>.button{grid-column:1/-1;justify-self:start}}
 @media(max-width:540px){.yg-home .home-hero{padding:25px 20px;border-radius:23px}.yg-home h1{font-size:clamp(2.65rem,14vw,4rem)}.yg-home .hero-art{min-height:230px}.yg-home .art-core{width:145px;height:160px}.yg-home .orbit{width:230px}.yg-home .chip-one{right:-2px;top:6%}.yg-home .chip-two{left:-2px;bottom:8%}.yg-home .chip-three{right:-2px;bottom:-1%}.yg-home .creator-grid,.yg-home .steps{grid-template-columns:1fr}.yg-home .creator-card{padding:19px}.yg-home .featured{gap:13px;padding:18px}.yg-home .featured-avatar{width:58px;height:58px;border-radius:18px}.yg-home .section{margin:30px 0 36px}.yg-home .section-head h2{font-size:1.8rem}.yg-home .final-cta{border-radius:21px}}
+
+/* Public-facing Creator Club refresh: bold, friendly, colourful and responsive. */
+.home-cinema .hero{min-height:500px;border-radius:28px;border:1px solid #ffffff16;background:radial-gradient(ellipse at 84% 16%,#b64dff55,transparent 32%),radial-gradient(ellipse at 70% 80%,#ff526f3d,transparent 36%),radial-gradient(ellipse at 20% 5%,#30d5c855,transparent 30%),linear-gradient(125deg,#211533 0%,#151122 52%,#241126 100%);box-shadow:0 25px 90px #08061188}
+.home-cinema .hero:before{color:#ffffff09;text-shadow:0 0 90px #b64dff30}
+.cinema-kicker{color:#ff91a4}.cinema-kicker:before{background:linear-gradient(90deg,#ff526f,#b64dff)}
+.home-cinema .hero h1{letter-spacing:-.078em}
+.home-cinema .hero h1 span{background:linear-gradient(95deg,#ff7890 5%,#ffc76a 50%,#b98aff 90%);-webkit-background-clip:text;background-clip:text;color:transparent!important}
+.home-cinema .btn{border-radius:999px;background:linear-gradient(110deg,#ff526f,#b64dff);border:1px solid #ffffff24;box-shadow:0 8px 25px #b64dff20}
+.home-cinema .btn.secondary{background:#ffffff0d;border:1px solid #ffffff25;box-shadow:none}
+.cinema-row{grid-auto-columns:minmax(240px,30%);gap:16px;scrollbar-color:#b64dff transparent}
+.cinema-card{border-radius:20px;background:linear-gradient(150deg,#211b30,#171421);border-color:#ffffff17;box-shadow:0 10px 35px #08061138}
+.cinema-card:hover{transform:translateY(-5px) scale(1.01);border-color:#b64dff80;box-shadow:0 18px 45px #08061180}
+.cinema-art{height:180px;background:radial-gradient(ellipse at 80% 10%,#ff526f44,transparent 35%),linear-gradient(135deg,#393050,#211b30 58%,#151321)}
+.cinema-art.art-1{background:radial-gradient(ellipse at 80% 20%,#30d5c877,transparent 36%),linear-gradient(135deg,#153d43,#252039 72%)}
+.cinema-art.art-2{background:radial-gradient(ellipse at 75% 10%,#ffcf6b77,transparent 38%),linear-gradient(135deg,#563b27,#292039 72%)}
+.cinema-art.art-3{background:radial-gradient(ellipse at 75% 10%,#b64dff88,transparent 38%),linear-gradient(135deg,#352354,#211a32 72%)}
+.cinema-art.art-4{background:radial-gradient(ellipse at 75% 10%,#ff526f77,transparent 38%),linear-gradient(135deg,#56263a,#211a32 72%)}
+.cinema-card-body{padding:19px}
+.cinema-pill{background:#ffffff0b;border-color:#ffffff20;color:#cbb9ff;border-radius:999px}
+.cinema-card-link{color:#ff91a4}
+.cinema-bottom{border-radius:24px;border-color:#ffffff17;background:radial-gradient(ellipse at 85% 0%,#b64dff35,transparent 40%),linear-gradient(110deg,#20172e,#171321 68%,#241329)}
+.cinema-featured{display:flex;align-items:center;justify-content:space-between;gap:22px;flex-wrap:wrap;padding:clamp(22px,4vw,34px);margin:0 0 30px;border:1px solid #ffffff18;border-radius:24px;background:radial-gradient(ellipse at 95% 0%,#30d5c82b,transparent 42%),radial-gradient(ellipse at 5% 100%,#ff526f25,transparent 42%),linear-gradient(120deg,#211a31,#171321)}
+.cinema-featured-main{display:flex;align-items:center;gap:17px;min-width:0;flex:1}
+.cinema-featured-avatar{width:76px;height:76px;flex:0 0 76px;display:grid;place-items:center;border-radius:23px;background:linear-gradient(135deg,#30d5c8,#b64dff 58%,#ff526f);font-size:1.65rem;font-weight:1000;color:white;box-shadow:0 10px 28px #b64dff25}
+.cinema-featured h2{font-size:clamp(1.25rem,3vw,1.8rem);margin:7px 0 4px;letter-spacing:-.04em}
+.cinema-featured p{margin:0;color:#c5bed2;max-width:620px}
+.cinema-featured .feature-tag{display:inline-flex;padding:5px 10px;border:1px solid #30d5c84a;border-radius:999px;background:#30d5c815;color:#75eee3;font-size:.72rem;font-weight:900;letter-spacing:.09em;text-transform:uppercase}
+.cinema-featured .btn{white-space:nowrap}
+@media(max-width:700px){.home-cinema .hero{min-height:440px;border-radius:22px}.cinema-row{grid-auto-columns:minmax(230px,82%)}.cinema-art{height:145px}.cinema-featured{border-radius:20px}.cinema-featured-avatar{width:62px;height:62px;flex-basis:62px;border-radius:19px}}
+
 </style>
 <div class="yg-home">
   <section class="home-hero">
@@ -82,7 +112,8 @@
     </div>
     <div class="hero-art" aria-hidden="true"><div class="orbit"></div><div class="art-core"><div class="play-mark">▶</div><strong>YouGrow</strong><small>Discover something new</small></div><div class="float-chip chip-one"><b>✦</b> Fresh finds</div><div class="float-chip chip-two"><b>↗</b> New creators</div><div class="float-chip chip-three"><b>♡</b> Your interests</div></div>
   </section>
-  {% if adsense_ready %}<section class="ad-wrap"><div class="tag">ADVERTISEMENT</div><ins class="adsbygoogle" style="display:block;min-height:90px" data-ad-client="{{ adsense_client_id }}" data-ad-slot="{{ adsense_slot_id }}" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script></section>{% endif %}
+  <section class="cinema-featured" aria-label="Featured YouTube creator"><div class="cinema-featured-main"><div class="cinema-featured-avatar" aria-hidden="true">TT</div><div><span class="feature-tag">Featured creator · Tech</span><h2>TechTomesh01</h2><p>Discover the creator behind YouGrow. Visit the official YouTube channel and explore the latest videos.</p></div></div><a class="btn" href="https://www.youtube.com/@Techtomesh01" target="_blank" rel="noopener noreferrer">Visit YouTube channel ↗</a></section>
+{% if adsense_ready %}<section class="ad-wrap"><div class="tag">ADVERTISEMENT</div><ins class="adsbygoogle" style="display:block;min-height:90px" data-ad-client="{{ adsense_client_id }}" data-ad-slot="{{ adsense_slot_id }}" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script></section>{% endif %}
   <section class="featured"><div class="featured-avatar">TT</div><div><span class="featured-tag">★ Featured creator</span><h2>TechTomesh01</h2><p>Technology · Tutorials · Creator content — discover the channel behind YouGrow.</p></div><a class="button" href="https://www.youtube.com/@Techtomesh01" target="_blank" rel="noopener noreferrer">Visit YouTube channel ↗</a></section>
   <section class="section" id="discover"><div class="section-head"><div><span class="eyebrow">Made for discovery</span><h2>Creators worth meeting</h2><p>Browse approved channels from the YouGrow community.</p></div><a class="button light" href="{{ url_for('creators') }}">See all creators ↗</a></div>
   {% if channels %}<div class="creator-grid">{% for c in channels %}<article class="creator-card"><div class="card-top"><span class="category">{{ c.category or 'Creator pick' }}</span><span class="card-index">{{ '%02d'|format(loop.index) }}</span></div><div class="creator-bubble" aria-hidden="true">{{ (c.display_name or c.title or 'C')[0]|upper }}</div><h3>{{ c.title }}</h3><div class="byline">by {{ c.display_name }}</div><p class="desc">{{ c.description or 'Discover this creator and their latest work.' }}</p><div class="card-foot"><small>YOUTUBE CREATOR</small><a class="visit" href="{{ c.youtube_url }}" target="_blank" rel="noopener noreferrer">Visit channel ↗</a></div>{% if user %}<details style="margin-top:13px"><summary style="font-size:.82rem;color:#777389;cursor:pointer">Report listing</summary><form method="post" action="/report/{{ c.id }}" style="margin-top:10px"><input type="hidden" name="_csrf" value="{{ csrf_token() }}"><input class="field" name="reason" maxlength="500" placeholder="Tell us what's wrong" required><button class="button" type="submit">Send report</button></form></details>{% endif %}</article>{% endfor %}</div>{% else %}<div class="empty"><span class="eyebrow">The spotlight is open</span><h3>Help kick off the creator community.</h3><p>No approved channels are listed yet. Submit a genuine channel and it can appear here after admin review.</p><a class="button" href="{{ url_for('add_channel') }}">Submit a channel ↗</a></div>{% endif %}</section>
