@@ -1,5 +1,8 @@
 {% extends "base.html" %}
-{% block title %}My Creator Studio · YouGrow{% endblock %}
+{% block title %}My Creator Studio · YouGrow<script>
+(function(){document.querySelectorAll(".yg-youtube-avatar[data-youtube-url]").forEach(function(el){var id="";try{var u=new URL(el.getAttribute("data-youtube-url")||"");var p=u.pathname.split("/").filter(Boolean);if(p[0]&&p[0].charAt(0)==="@")id=p[0];else if((p[0]==="channel"||p[0]==="c"||p[0]==="user")&&p[1])id=p[1];}catch(e){}if(!id)return;var img=new Image();img.alt="";img.referrerPolicy="no-referrer";img.style.cssText="width:100%;height:100%;object-fit:cover;border-radius:inherit;display:block";img.onload=function(){el.textContent="";el.appendChild(img)};img.onerror=function(){el.title="YouTube profile photo unavailable"};img.src="https://unavatar.io/youtube/"+encodeURIComponent(id);});})();
+</script>
+{% endblock %}
 {% block body %}
 <style>
 /* Creator Studio refresh — keeps existing route and template data contracts intact. */
@@ -134,7 +137,7 @@
       <div class="sectionhead"><div><div class="eyebrow">Your corner of YouGrow</div><h2>My channels</h2></div><a class="mini-action" href="/channels/add">＋ Add channel</a></div>
       {% for c in channels %}
       <article class="channel">
-        <div class="channelleft"><div class="channelicon">▶</div><div class="channelmeta"><div class="category">{{c.category or 'Creator channel'}}</div><h3>{{c.title}}</h3><a class="watch" href="{{c.youtube_url}}" target="_blank" rel="noopener noreferrer">Open YouTube channel ↗</a></div></div>
+        <div class="channelleft"><div class="channelicon yg-youtube-avatar" data-youtube-url="{{c.youtube_url}}" aria-label="YouTube channel profile photo">▶</div><div class="channelmeta"><div class="category">{{c.category or 'Creator channel'}}</div><h3>{{c.title}}</h3><a class="watch" href="{{c.youtube_url}}" target="_blank" rel="noopener noreferrer">Open YouTube channel ↗</a></div></div>
         <span class="status {{'approved' if c.approved else 'pending'}}">{{'✓ Approved' if c.approved else '◷ Pending review'}}</span>
       </article>
       {% else %}
