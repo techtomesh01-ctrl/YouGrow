@@ -10,7 +10,7 @@ import android.widget.Toast
 class MainActivity : Activity() {
     private lateinit var web: WebView
     // Replace with the actual HTTPS URL after YouGrow is deployed.
-    private val baseUrl = "https://SET-YOUR-YOUGROW-URL.onrender.com"
+    private val baseUrl = "https://yougrow-web.onrender.com"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
