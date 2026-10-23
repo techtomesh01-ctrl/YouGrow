@@ -114,14 +114,38 @@
 .yg-home .channel-card p,.yg-home .creator-card p,.yg-home .feature-card p,.yg-home .category-card p{color:#b5b5c0}
 .yg-home .final-cta{background:radial-gradient(ellipse at 90% 0%,#ff24482b,transparent 42%),linear-gradient(120deg,#1b0b10,#111115);border:1px solid #ff24483d;color:#fff}
 .yg-home .final-cta p{color:#c4c0c5}.yg-home .home-section{color:#f8f8fb}.yg-home .home-section h2{color:#fff}
-@media(max-width:760px){.yg-home .home-hero{grid-template-columns:1fr}.yg-home .hero-art{min-height:220px}}
+/* Photo-reference refinement: cinematic red hero, tighter cards, polished mobile layout */
+.yg-home{max-width:1240px}
+.yg-home .home-hero{min-height:360px;border-radius:22px;grid-template-columns:minmax(0,1.05fr) minmax(280px,.95fr);padding:clamp(26px,4vw,48px);background:radial-gradient(ellipse at 72% 35%,#ff173c25,transparent 42%),linear-gradient(115deg,#09090c 0%,#16080d 55%,#09090c 100%);border-color:#6b1829}
+.yg-home h1{font-size:clamp(2.65rem,5.8vw,4.65rem);line-height:.99;letter-spacing:-.055em}
+.yg-home h1 .colour-word{background:linear-gradient(100deg,#ff2448,#ff777f);-webkit-background-clip:text;background-clip:text}
+.yg-home .hero-art{min-height:300px}
+.yg-home .orbit{width:min(92%,320px);border-style:solid;border-color:#ff24485c;box-shadow:0 0 0 22px #ff244808,0 0 0 44px #ff244805}
+.yg-home .art-core{width:min(76%,245px);min-height:220px;border-radius:24px;background:radial-gradient(circle at 50% 25%,#ff718833,transparent 42%),linear-gradient(145deg,#350916,#10090d 72%);border:1px solid #ff24486b;box-shadow:0 0 55px #ff244825,inset 0 0 35px #ff24480c}
+.yg-home .play-mark{display:grid;place-items:center;width:70px;height:50px;border-radius:15px;background:#ff173c;color:#fff;box-shadow:0 0 32px #ff173c55}
+.yg-home .art-core strong{font-size:1.6rem;letter-spacing:-.06em}
+.yg-home .float-chip{background:#171116;border-color:#56202d;color:#f8eaf0;box-shadow:0 10px 30px #0008}
+.yg-home .trust-row{color:#c9c2c8}
+.yg-home .trust-row b{color:#ff526b}
+.yg-home .cinema-featured,.yg-home .featured{background:radial-gradient(ellipse at 85% 20%,#ff244824,transparent 45%),linear-gradient(120deg,#1a0c11,#101014);border:1px solid #6c1d30;border-radius:16px;color:#fff}
+.yg-home .creator-grid{gap:14px}
+.yg-home .creator-card{border-radius:14px;border:1px solid #292a32;background:linear-gradient(150deg,#18181e,#0d0d11);transition:transform .18s,border-color .18s}
+.yg-home .creator-bubble,.yg-home .featured-avatar,.yg-home .cinema-featured-avatar{background:linear-gradient(145deg,#ff2448,#72001c);border:1px solid #ff667c66;box-shadow:0 8px 24px #ff24481c}
+.yg-home .visit{background:#c9002d;color:#fff;border-radius:8px;padding:8px 12px}
+.yg-home .section-head h2,.yg-home .section h2{letter-spacing:-.045em}
+.yg-home .steps{gap:12px}
+.yg-home .step{background:#111115;border:1px solid #2a2228;border-radius:14px;padding:20px}
+.yg-home .step-no{color:#ff3658}
+.yg-home .final-cta{border-radius:18px}
+@media(max-width:760px){.yg-home .home-hero{grid-template-columns:1fr;gap:4px;padding:25px 20px}.yg-home .hero-art{min-height:225px}.yg-home .art-core{min-height:175px}.yg-home .creator-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.yg-home .cinema-featured{align-items:flex-start}.yg-home .hero-actions .button{flex:1}}
+@media(max-width:420px){.yg-home .creator-grid{grid-template-columns:1fr}.yg-home h1{font-size:2.65rem}}
 </style>
 <div class="yg-home">
   <section class="home-hero">
     <div class="hero-copy">
       <span class="hero-kicker">✦ A home for creators and curious viewers</span>
-      <h1>Find your people.<br>Grow your <span class="colour-word">corner.</span></h1>
-      <p class="lead">Meet fresh YouTube channels, explore your favourite topics, and connect with creators who share your interests. Your next discovery starts here.</p>
+      <h1>Grow Together<br><span class="colour-word">Create Bigger.</span></h1>
+      <p class="lead">Discover, collaborate, and grow with real YouTube creators from around the world.</p>
       <div class="hero-actions"><a class="button" href="{{ url_for('creators') }}">Explore creators <span aria-hidden="true">↗</span></a><a class="button light" href="{{ url_for('register') }}">Join YouGrow <span aria-hidden="true">＋</span></a></div>
       <div class="trust-row"><span><b>✓</b> Free to join</span><span><b>✓</b> Creator discovery</span><span><b>✓</b> Real collaborations</span></div>
     </div>
