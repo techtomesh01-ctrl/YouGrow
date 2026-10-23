@@ -67,6 +67,9 @@ _db_initialized = False
 @app.before_request
 def ensure_database_initialized():
     global _db_initialized
+    # Let /health report missing PostgreSQL configuration as a clear 503.
+    if request.endpoint == "health" and not DATABASE_URL:
+        return None
     if not _db_initialized:
         init_db()
         _db_initialized = True
